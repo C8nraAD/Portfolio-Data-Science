@@ -8,6 +8,6 @@ theme:
 nav:
   - Executive Summary: index.md
   - Core Architectures:
-    - Multimodal IDP (LLM ETL): projects/invoice-etl.md
-    - InsurTech Pricing Engine: projects/insurtech-pricing.md
-    - AI Half-Marathon Inference: projects/half-marathon-ai.md
+    - Multimodal IDP (LLM ETL): projekty/ocr-pipeline.md
+    - InsurTech Pricing Engine: projekty/ubezpieczenia.md
+    - AI Half-Marathon Inference: projekty/biegacz-cloud.md
