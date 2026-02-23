@@ -1,0 +1,17 @@
+site_name: Portfolio
+theme:
+  name: material
+
+site_name: Portfolio Data Science
+theme:
+  name: material
+  palette:
+    primary: black
+    accent: deep orange
+
+nav:
+  - O mnie: index.md
+  - Portfolio Projektów:
+    - Data Engineering (OCR & SQL): projekty/ocr-pipeline.md
+    - ML w Biznesie (Ubezpieczenia): projekty/ubezpieczenia.md
+    - Cloud Deployment (Digital Ocean): projekty/biegacz-cloud.md
