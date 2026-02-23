@@ -1,53 +1,38 @@
-# ⚡ AI Invoice Intelligence: Multimodalny ETL
-<a href="https://github.com/C8nraAD/-Doradca-Sk-adki-Ubezpieczeniowej-AI" target="_blank">Link do repozytorium </a>
-##  O projekcie i wartości biznesowej
-System klasy **Intelligent Document Processing (IDP)**, który automatyzuje proces ekstrakcji danych z faktur (PDF/IMG) i ich integrację z wewnętrznymi systemami firmy (SQL, CSV). Projekt eliminuje wąskie gardło w postaci manualnego przepisywania faktur, zapewniając automatyczną weryfikację cen z katalogiem produktów oraz walidację danych kontrahentów.
+# ⚡ Multimodal IDP Pipeline: LLM-Driven Invoice ETL
 
-**Główne cele biznesowe:**
-* **Automatyczna Audytowalność:** Wykrywanie rozbieżności między ceną na fakturze a ceną w oficjalnym cenniku (`ceny_sie_zgadzaja`).
-* **Strukturyzacja Unstructured Data:** Zamiana nieustrukturyzowanych plików PDF/JPG na czysty format relacyjny.
-* **Redukcja Błędów:** Wykorzystanie silnej typizacji (Pydantic) do wymuszenia poprawności danych już na etapie odczytu AI.
+[Live Deployment / Repository](URL_DO_POPRAWIENIA)
 
-## 🛠 Technologie i Ekosystem
-| Komponent | Technologia |
+## 🎯 Architecture Overview & Business Objective
+An Intelligent Document Processing (IDP) system engineered to automate unstructured financial data extraction (PDF/IMG) and reconcile it with internal relational systems. The pipeline replaces fragile, heuristic-based OCR with a multimodal Generative AI engine constrained by strict data schemas. This guarantees deterministic structuring of invoice data for downstream integrity checks and ERP ingestion.
+
+## 🛠 Tech Stack & Ecosystem
+| Component | Technology |
 | :--- | :--- |
-| **LLM Orchestration** | `instructor` (Strict Schema Enforcement) |
-| **Core AI Model** | `OpenAI GPT-4o` (Multimodal) |
-| **Data Engineering** | `Pandas` (Vectorized Joins & Merges) |
-| **Validation** | `Pydantic v2` |
-| **Database** | `SQLite` (Client Data), `CSV` (Price Lists) |
-| **Image Processing** | `pdf2image`, `base64` encoding |
+| **LLM Orchestration** | `instructor` (Strict JSON Schema Enforcement via Pydantic) |
+| **Multimodal Engine** | `OpenAI GPT-4o` (Zero-shot vision extraction) |
+| **Data Engineering** | `Pandas` (Vectorized Relational Merges) |
+| **Data Validation** | `Pydantic v2` (Type coercion & logical validation) |
+| **Storage & Lookup** | `SQLite` (Client Data), `CSV` (Master Product Catalogs) |
+| **Ingestion** | `pdf2image`, Base64 encoding |
 
-##  Kluczowe Rozwiązania Architektoniczne
+## 🏗 Core Pipeline Mechanics
+The system executes a robust Extract-Transform-Load (ETL) workflow prioritizing data integrity:
 
-Projekt realizuje pełny proces ETL (Extract, Transform, Load) z naciskiem na integralność danych:
+### 1. Multimodal Ingestion & Schema Enforcement
+Bypassing traditional OCR pipelines, the system utilizes `gpt-4o` combined with the `instructor` wrapper.
+* **Deterministic Output:** Unstructured visual data is directly mapped into a highly typed `InvoiceInfo` Pydantic model, eliminating regex-based parsing errors.
+* **Automated Preprocessing:** Native conversion of multi-format inputs (PDFs via `pdf2image`) into normalized Base64 payloads for the Vision API.
 
-### 1. Multimodalna Ekstrakcja 
-Zamiast klasycznego OCR, system wykorzystuje model `gpt-4o` z wrapperem `instructor`. Pozwala to na:
-* **Bezpośrednie mapowanie do obiektów Python:** Dane trafiają do klasy `InvoiceInfo`, co eliminuje błędy parsowania tekstu.
-* **Obsługę PDF i Obrazów:** Automatyczna konwersja pierwszej strony PDF do formatu JPEG za pomocą `pdf2image`.
+[Image of an Intelligent Document Processing pipeline using multimodal LLM for data extraction, schema validation, and database ingestion]
 
-[Image of an OCR to SQL data pipeline architecture diagram showing image input, preprocessing, OCR engine, data validation, and SQL database storage]
+### 2. Cross-Source Deterministic Reconciliation
+The most critical tier of the pipeline. Once the probabilistic LLM extraction is validated by Pydantic, the payload enters a deterministic `Pandas` computation engine:
+* **Relational Joins:** Executing vectorized merges between extracted invoice data and the SQLite client database.
+* **Master Data Lookup:** Hash-matching extracted SKUs/prices against the authoritative product catalog (`zad_domowe__products.csv`).
+* **Automated Auditing:** Computing the `total_price` tensor and dynamically flagging price discrepancies (`ceny_sie_zgadzaja` boolean flag) in $O(N)$ time complexity.
 
-### 2. Zaawansowana Logika Walidacji 
-Zastosowanie schematów `InvoiceInfoItem` gwarantuje, że:
-* Każda pozycja na fakturze posiada wymagane pola (`product_id`, `quantity`, `price`).
-* Typy danych są zgodne (np. `date` jest obiektem typu datetime, a nie surowym stringiem).
-
-### 3. Cross-Source Data Merging
-Najsilniejszy punkt potoku — po ekstrakcji danych z AI, system wykonuje operacje na ramkach danych `Pandas`:
-* **SQL Join:** Łączenie danych z faktury z bazą klientów (`zad_domowe__clients.db`).
-* **CSV Lookup:** Porównywanie cen z faktury z katalogiem produktów (`zad_domowe__products.csv`).
-* **Automatyczny Audit:** Wyliczanie kolumny `total_price` oraz flagowanie niezgodności cenowych.
-
-##  Zarządzanie Stanem Plików 
-Pipeline implementuje prostą maszynę stanów dla plików w systemie operacyjnym:
-* **`raw/`**: Pliki oczekujące na procesowanie.
-* **`processed/`**: Pliki pomyślnie przetworzone i dodane do raportu.
-* **`error/`**: Dokumenty, których AI nie było w stanie zinterpretować (izolacja błędów).
-
-## 📊 Efektywność Pipeline'u
-* **Dokładność Ekstrakcji:** Dzięki GPT-4o i walidacji `instructor`, system radzi sobie z różnymi układami faktur bez konieczności definiowania reguł (Template-less OCR).
-* **Integrity Check:** 100% poprawność sum kontrolnych dzięki weryfikacji krzyżowej z katalogiem produktów.
-* **Output:** Jednolity raport `raport_koncowy.csv` gotowy do importu do systemów ERP/BI.
-
+### 3. Stateful Artifact Orchestration
+The pipeline implements a robust, directory-based Finite State Machine for file lifecycle management, ensuring no data is processed twice or lost silently:
+* `raw/`: Ingestion queue.
+* `processed/`: Successfully reconciled and audited payloads.
+* `error/`: Quarantined artifacts failing Pydantic validation or lacking strict LLM schema adherence.

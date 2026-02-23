@@ -1,38 +1,36 @@
-# 🏃‍♂️ AI Kalkulator Półmaratonu
-<a href="https://whale-app-k2xqp.ondigitalocean.app" target="_blank"> Aplikacja</a>
+# 🏃‍♂️ AI Half-Marathon Inference Engine & Pacing Assistant
 
-##  O projekcie i wartości biznesowej
-Aplikacja to interaktywny asystent biegowy, który szacuje czas ukończenia półmaratonu na podstawie krótkiego wywiadu. Wykorzystuje model uczenia maszynowego wytrenowany na historycznych wynikach tysięcy zawodników. Oprócz samej predykcji, narzędzie generuje spersonalizowany profil tempa (międzyczasy na kluczowych kilometrach) oraz oferuje porady treningowe od sztucznej inteligencji.
+[Live Deployment](https://whale-app-k2xqp.ondigitalocean.app)
 
-## 🛠 Technologie i Ekosystem
-* **Frontend & Logika UI:** Streamlit (wykorzystanie maszyny stanów FSM do obsługi czatu).
-* **Machine Learning:** `scikit-learn` (Ridge Regression).
-* **Data Engineering & Optymalizacja:** `NumPy` (wektoryzacja obliczeń), `Pandas`.
-* **Chmura & MLOps:** AWS S3 / DigitalOcean Spaces (przechowywanie modelu i danych referencyjnych).
-* **Generative AI:** OpenAI (GPT-4o-mini) + Langfuse (monitorowanie i telemetria LLM).
-* **Wizualizacje:** Altair.
+## 🎯 System Overview & Business Objective
+An end-to-end predictive application estimating half-marathon completion times via a conversational UI. The system leverages an L2 regularized machine learning model trained on historical runner telemetry. Beyond inference, the engine generates customized, vectorized pacing profiles and integrates a monitored LLM for context-aware training recommendations.
 
-##  Kluczowe Rozwiązania Architektoniczne
+## 🛠 Tech Stack & Ecosystem
+* **Frontend & State Management:** Streamlit (FSM-based dialogue orchestration).
+* **Machine Learning:** `scikit-learn` (Ridge Regression, Pipeline architecture).
+* **Data Engineering & Computation:** `NumPy` (vectorization), `Pandas`.
+* **Cloud Storage & MLOps:** AWS S3 / DigitalOcean Spaces (stateless artifact retrieval).
+* **Generative AI & Observability:** OpenAI API (GPT-4o-mini) + Langfuse (LLM telemetry).
+* **Data Visualization:** Altair.
 
-Projekt został zaprojektowany z myślą o wydajności i integracji z zewnętrznymi serwisami:
+## 🏗 Key Architectural Decisions
+The application is architected for low latency, stateless execution, and robust error handling:
 
-1. **Zoptymalizowany Silnik Obliczeniowy (NumPy):** Zamiast powolnych, iteracyjnych pętli w Pythonie, generowanie 22-punktowego profilu tempa (skumulowane czasy i interpolacja) zostało zaimplementowane z użyciem wektoryzowanych funkcji `np.cumsum` i `np.interp`. Znacząco redukuje to złożoność obliczeniową.
-2. **Architektura Czatbota (FSM):** Interfejs użytkownika oparty jest na deterministycznej maszynie stanów (Finite State Machine). Walidatory oparte na wyrażeniach regularnych (RegEx) pilnują poprawności wprowadzanych danych krok po kroku, zanim zapytanie trafi do modelu ML.
-3. **Cloud-Native:** Aplikacja ładuje model (`.pkl`) oraz dane agregacyjne (`.csv`) bezpośrednio z chmury obiektowej (S3), co uniezależnia kod od ciężkich plików i ułatwia wdrażanie na platformach PaaS.
-4. **Integracja i Telemetria LLM:** Wykorzystanie wrappera `langfuse.openai` pozwala nie tylko na generowanie spersonalizowanych porad, ale zapewnia też pełne monitorowanie kosztów, opóźnień i jakości logów na dashboardzie Langfuse.
+1. **Vectorized Computation Engine (NumPy):** Eliminated native Python `for`-loops in favor of vectorized operations (`np.cumsum`, `np.interp`). This generates a 22-point cumulative pacing profile with strictly O(1) operations per array, aggressively minimizing computational overhead.
+2. **Deterministic UI State Orchestration (FSM):** The conversational interface is strictly governed by a Finite State Machine. Pre-inference input sanitization is enforced via RegEx validators, preventing prompt injection and ensuring data integrity before the payload reaches the ML pipeline.
+3. **Stateless Cloud-Native Design:** The application dynamically loads serialized model artifacts (`.pkl`) and aggregational reference data (`.csv`) directly from S3-compatible object storage. This decouples the codebase from heavy binary files and streamlines PaaS deployment.
+4. **LLM Telemetry & Observability:** Implemented the `langfuse.openai` wrapper to establish comprehensive observability. This guarantees granular monitoring of token consumption, latency spikes, and log quality, critical for production-grade GenAI integration.
 
-## 📸 Zrzuty Ekranu
-![Wywiad i predykcja](assets/3.JPG)
-![Analiza wyników i splity](assets/4.JPG)
-![Langfuse](assets/5.JPG)
+## 📸 System Telemetry & Output
+![Conversational Input & Inference](assets/3.JPG)
+![Pacing Profile Analytics](assets/4.JPG)
+![Langfuse Observability Dashboard](assets/5.JPG)
 
-## 🧠 Model Machine Learning
-Prognoza opiera się na stabilnym potoku: `Pipeline(StandardScaler → Ridge Regression)`.
+## 🧠 Predictive Model Architecture
+Inference is driven by a robust, non-leaking data pipeline: `Pipeline([('scaler', StandardScaler()), ('ridge', Ridge())])`.
 
-* **Dane uczące:** Połączony zbiór wyników z lat 2023-2024, obejmujący **18 377** biegaczy (po czyszczeniu danych).
-* **Walidacja krzyżowa (CV=5):** * **R²:** 0.9834 (model tłumaczy ponad 98% wariancji w danych).
-    * **MAE:** ~54 sekundy (błąd prognozy mniejszy niż minuta na dystansie 21 km).
-* **Zastosowanie praktyczne:** Wdrożony model operuje na założeniu błędu konserwatywnego (±5 minut), aby uwzględnić "szum" wprowadzany przez subiektywne dane użytkownika podawane w czacie.
-
-
-
+* **Training Corpus:** Aggregated and sanitized historical dataset (2023-2024) comprising N = 18,377 unique observations.
+* **Cross-Validation Metrics (CV=5):**
+    * **R² Score:** 0.9834 (capturing >98% of dataset variance).
+    * **Mean Absolute Error (MAE):** ~54 seconds over a 21.0975 km distance.
+* **Production Heuristics:** The deployed model intentionally broadens the confidence interval (±5 minutes) to account for stochastic variance introduced by subjective, user-reported feature inputs via the chat interface.

@@ -1,32 +1,36 @@
-# 🩺 Optymalizator Składek Zdrowotnych (AI & Reguły Biznesowe)
-<a href="https://doradcaskladki.streamlit.app" target="_blank"> Aplikacja</a>
+# 🩺 InsurTech Premium Optimizer: AI-Driven Underwriting & Simulation Engine
 
-##  O projekcie i wartości biznesowej
-Aplikacja to interaktywne narzędzie InsurTech (Insurance Technology). Szacuje wysokość składki ubezpieczenia zdrowotnego na podstawie profilu ryzyka użytkownika. Największą wartością biznesową projektu jest wbudowany **Silnik Rekomendacji**, który nie tylko wytyka problemy zdrowotne, ale przeprowadza symulację finansową "w locie" – pokazując dokładnie, ile pieniędzy użytkownik zaoszczędzi, jeśli np. rzuci palenie lub zredukuje BMI.
+[Live Deployment](https://doradcaskladki.streamlit.app)
 
-## 🛠 Technologie i Ekosystem
-* **Frontend & Wizualizacja:** Streamlit, Plotly Express (dynamiczne wykresy słupkowe oszczędności).
-* **Machine Learning:** PyCaret (automatyzacja potoków ML, ładowanie modelu predykcyjnego).
-* **Data Engineering:** Pandas, Python 3.9+ (typowanie statyczne).
-* **Architektura:** Wzorce obiektowe, Immutable Data Structures (`@dataclass(frozen=True)`), Functional Programming (wykorzystanie `Callable`).
+## 🎯 System Overview & Business Objective
+An interactive InsurTech platform engineered for dynamic health insurance premium estimation and risk profiling. The system transcends basic inference by integrating a deterministic **Recommendation & Simulation Engine**. It executes real-time financial simulations, quantifying potential premium savings (ROI) achievable through targeted health metrics optimization (e.g., BMI reduction, smoking cessation).
 
-## Kluczowe Rozwiązania Architektoniczne
+## 🛠 Tech Stack & Ecosystem
+| Tier | Technology |
+| :--- | :--- |
+| **Frontend & Visualization** | Streamlit, Plotly Express (Dynamic state-driven charting) |
+| **Machine Learning** | PyCaret (AutoML pipeline & artifact serialization) |
+| **Data Engineering** | Pandas, Python 3.9+ (Strict Type Hinting) |
+| **Architecture Patterns** | Immutability (`@dataclass(frozen=True)`), Functional Programming, SoC |
 
-Kod zrywa z typowym dla Streamlita, płaskim paradygmatem skryptowym na rzecz dojrzałej inżynierii oprogramowania:
+## 🏗 Core Architectural Mechanics
+The codebase intentionally breaks away from Streamlit's default flat-script paradigm, enforcing rigorous software engineering principles:
 
-1. **Niezmienne Struktury Danych (Immutability):** Stan aplikacji i konfiguracja są zarządzane przez zamrożone klasy danych (`AppConfig`, `UserProfile`, `AppState`). Chroni to aplikację przed niepożądanymi efektami ubocznymi (side-effects) i gwarantuje spójność danych podczas symulacji.
-2. **Dynamiczny Silnik Regułowy:** Klasa `RecommendationEngine` ewaluuje profil użytkownika za pomocą funkcji wyższego rzędu. Każda rekomendacja posiada własną logikę aktywacji (`applies_when`) oraz funkcję transformującą stan (`simulate_change`), co pozwala na łatwe skalowanie i dodawanie nowych reguł biznesowych bez modyfikacji rdzenia systemu.
-3. **Separacja Warstw (SoC):** Logika prezentacji (`ui_sidebar`, `ui_dashboard`) jest całkowicie odizolowana od logiki domenowej (obliczanie składek) i zarządzania sesją.
-4. **Zarządzanie Stanem Symulacji:** Zmiana jakiegokolwiek parametru użytkownika powoduje automatyczny reset aktywnych symulacji, zapobiegając błędom logicznym na wykresach oszczędności.
+1. **Immutable State Management:** Application configuration and user telemetry are strictly governed by frozen data structures (`AppConfig`, `UserProfile`, `AppState`). This entirely eliminates unintended side-effects and guarantees data consistency across execution reruns and simulation triggers.
+2. **Functional Rule Engine:** The `RecommendationEngine` evaluates user profiles via higher-order functions. Each business rule encapsulates its own activation logic (`applies_when`) and state mutation constraint (`simulate_change`), enabling $O(1)$ scalability for adding new underwriting rules without modifying the core system.
+3. **Strict Separation of Concerns (SoC):** Presentation layers (`ui_sidebar`, `ui_dashboard`) are heavily decoupled from domain logic (premium computation) and session state orchestrators.
+4. **Deterministic Simulation State:** Any mutation in the baseline user parameters triggers an automatic teardown and reset of active simulation states, preventing logical anomalies in financial projections.
 
-## 📸 Zrzuty Ekranu
 
-![Dashboard KPI i Profil](assets/1.JPG)
-![Symulacja Oszczędności i Wykresy](assets/2.JPG)
 
-## 🧠 Model Machine Learning
-Rdzeniem wyceny jest model wytrenowany i spakowany przy użyciu biblioteki **PyCaret**.
+## 📸 System Telemetry & Output
+![KPI Dashboard & Risk Profile](assets/1.JPG)
+![Financial Simulation & Analytics](assets/2.JPG)
 
-* **Proces Inferencji:** Dane z obiektu `UserProfile` są mapowane do postaci wektora Pandas DataFrame.
-* **Transformacja Biznesowa:** Surowa predykcja modelu (bazująca na historycznych danych w USD) jest poddawana w locie transformacjom biznesowym: przeliczeniu kursu walut (USD -> PLN), korekcie rynkowej (Market Adjustment Factor) oraz nałożeniu zniżek (polisa grupowa, wyższy udział własny).
+## 🧠 ML Inference & Business Logic Layer
+The core underwriting engine is powered by a serialized AutoML pipeline deployed via PyCaret.
 
+* **Inference Pipeline:** Instantiated `UserProfile` objects are vectorized into Pandas DataFrames for batch-like model consumption.
+* **Deterministic Post-Processing:** The raw probabilistic output (historical USD baseline) is intercepted and subjected to strict business transformations dynamically: 
+$$P_{final} = (P_{ML} \times FX) \times (1 - D) \times MAF$$
+*(Where: $FX$ = Currency Exchange Rate, $D$ = Discount Factors, $MAF$ = Market Adjustment Factor).*
