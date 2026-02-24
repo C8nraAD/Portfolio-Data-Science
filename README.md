@@ -1,36 +1,30 @@
-# 📊 Data Science & Business Analytics Portfolio
+# Data Science & Business Analytics Portfolio
 
+This repository serves as the central documentation hub for my analytics projects. I utilize a Documentation-as-Code approach, building an interactive site with MkDocs and automating deployments via CI/CD pipelines.
 
-To repozytorium stanowi centralny hub dokumentacji moich projektów analitycznych. Wykorzystuję tutaj podejście **Documentation-as-Code**, budując interaktywną stronę za pomocą MkDocs i automatyzując wdrożenie przez CI/CD.
+## Live Deployment
+The full, compiled project documentation is available here: https://c8nraad.github.io/Portfolio-Data-Science/
 
-## 🔗 Live Demo
-Z pełną, czytelną wersją dokumentacji projektowej zapoznasz się tutaj:
- **[https://c8nraad.github.io/Portfolio-Data-Sience/](https://c8nraad.github.io/Portfolio-Data-Sience/)**
+## Technical Stack
+* **Documentation:** MkDocs (Material theme)
+* **Data Analysis:** Python (Pandas, NumPy)
+* **Automation:** GitHub Actions (CI/CD pipeline triggered on push)
+* **Integrations:** Multimodal OCR Pipeline, GPT-4o API, SQLite
 
----
-
-## 🛠️ Stack Techniczny Portfolio
-* **Dokumentacja:** MkDocs z motywem `material`.
-* **Analiza Danych:** Python (Pandas, NumPy).
-* **Automatyzacja:** GitHub Actions (automatyczny build przy każdym `push`).
-* **Integracje:** OCR Pipeline, GPT-4o API, SQLite.
-
-## 📈 Kluczowe Projekty (Case Studies)
+## Key Projects (Case Studies)
 
 ### 1. AI Invoice Intelligence (Multimodal ETL)
-Zaawansowany rurociąg danych typu **Extract-Transform-Load**.
-* **Problem:** Niestrukturalne dane z faktur PDF/JPG.
-* **Rozwiązanie:** Wykorzystanie modelu GPT-4o (Vision) do ekstrakcji danych prosto do obiektów Pythona (Pydantic).
-* **Data Engineering:** Łączenie danych przy użyciu **Vectorized Joins** w Pandas z bazą klientów SQLite.
+An advanced Extract-Transform-Load data pipeline.
+* **Problem:** Unstructured data extraction from PDF/JPG invoices.
+* **Solution:** Leveraging the GPT-4o vision model to extract and validate payloads directly into strictly typed Python objects (`Pydantic`).
+* **Data Engineering:** Reconciling extracted payloads with a SQLite client database using vectorized Pandas joins.
 
-### 2. Analiza Ryzyka Ubezpieczeniowego
-Przetwarzanie i czyszczenie dużych zbiorów danych biznesowych.
-* **Technologie:** Pandas, Matplotlib.
-* **Wartość:** Identyfikacja kluczowych czynników wpływających na rentowność portfela.
+### 2. Insurance Risk Analysis
+Processing and sanitizing business datasets.
+* **Technologies:** Pandas, Matplotlib
+* **Business Value:** Identification of key risk factors driving portfolio profitability and premium optimization.
 
----
-
-## 🏗️ Struktura Projektu
-- `docs/` - Pliki źródłowe Markdown z opisami projektów.
-- `mkdocs.yml` - Główna konfiguracja wizualna.
-- `.github/workflows/` - Skrypty automatyzacji wdrożenia.
+## Repository Structure
+* `docs/` - Markdown source files containing project specifications.
+* `mkdocs.yml` - Main site configuration and routing.
+* `.github/workflows/` - CI/CD deployment automation scripts.
