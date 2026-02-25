@@ -7,8 +7,8 @@ Welcome. This documentation serves as a centralized, technically rigorous reposi
 
 ## 🏗 Core Architectures & Projects
 
-* **[Multimodal IDP Pipeline (LLM-Driven ETL)](LINK_DO_FAKTUR):** Automated unstructured financial data extraction replacing heuristic OCR with strict, Pydantic-validated LLM schemas and vectorized SQL reconciliation.
-* **[InsurTech Premium Optimizer](LINK_DO_SKLADEK):** End-to-end ML underwriting engine deployed with an immutable, FSM-based Streamlit UI, performing real-time deterministic financial simulations.
+* **[Multimodal IDP Pipeline (LLM-Driven ETL)]:** Automated unstructured financial data extraction replacing heuristic OCR with strict, Pydantic-validated LLM schemas and vectorized SQL reconciliation.
+* **[InsurTech Premium Optimizer]:** End-to-end ML underwriting engine deployed with an immutable, FSM-based Streamlit UI, performing real-time deterministic financial simulations.
 * **[Cloud-Native MLOps & Deployment]:** Containerization, API development, and PaaS deployment of predictive models ensuring high availability and stateless execution.
 * **[Data-Driven Business Analytics]:** Bridging the gap between raw statistical modeling and actionable corporate strategy.
 
