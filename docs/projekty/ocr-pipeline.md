@@ -23,7 +23,10 @@ Bypassing traditional OCR pipelines, the system utilizes `gpt-4o` combined with 
 * **Deterministic Output:** Unstructured visual data is directly mapped into a highly typed `InvoiceInfo` Pydantic model, eliminating regex-based parsing errors.
 * **Automated Preprocessing:** Native conversion of multi-format inputs (PDFs via `pdf2image`) into normalized Base64 payloads for the Vision API.
 
-[Image of an Intelligent Document Processing pipeline using multimodal LLM for data extraction, schema validation, and database ingestion]
+## 📸 System Telemetry & Output
+![](assets/1.JPG)
+![](assets/.JPG)
+![](assets/5.JPG)
 
 ### 2. Cross-Source Deterministic Reconciliation
 The most critical tier of the pipeline. Once the probabilistic LLM extraction is validated by Pydantic, the payload enters a deterministic `Pandas` computation engine:
