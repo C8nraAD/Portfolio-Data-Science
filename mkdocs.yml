@@ -8,6 +8,6 @@ theme:
 nav:
   - Executive Summary: index.md
   - Core Architectures:
-    - Intelligent Document Processing (IDP): projekty/ocr-pipeline.md
-    - Actuarial Intelligence Automated Underwriting & Risk Framework: projekty/ubezpieczenia.md
-    - Endurance Dynamics Predictive Performance Engine: projekty/biegacz-cloud.md
+  - Intelligent Document Processing (IDP): projekty/ocr-pipeline.md
+  - Actuarial Intelligence Automated Underwriting & Risk Framework: projekty/ubezpieczenia.md
+  - Endurance Dynamics Predictive Performance Engine: projekty/biegacz-cloud.md
