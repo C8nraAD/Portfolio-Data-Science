@@ -3,7 +3,7 @@
 This repository serves as the central documentation hub for my analytics projects. I utilize a Documentation-as-Code approach, building an interactive site with MkDocs and automating deployments via CI/CD pipelines.
 
 ## Live Deployment
-The full, compiled project documentation is available here: https://c8nraad.github.io/Portfolio-Data-Science/
+The full, compiled project documentation is available here: https://c8nraad.github.io/Portfolio-Data-Sience/
 
 ## Technical Stack
 * **Documentation:** MkDocs (Material theme)
