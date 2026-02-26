@@ -23,15 +23,10 @@ Bypassing traditional OCR pipelines, the system utilizes `gpt-4o` combined with 
 * **Deterministic Output:** Unstructured visual data is directly mapped into a highly typed `InvoiceInfo` Pydantic model, eliminating regex-based parsing errors.
 * **Automated Preprocessing:** Native conversion of multi-format inputs (PDFs via `pdf2image`) into normalized Base64 payloads for the Vision API.
 
-## 📸 System Telemetry & Output
-![](assets/1.JPG)
-![](assets/.JPG)
-![](assets/5.JPG)
-
 ### 2. Cross-Source Deterministic Reconciliation
 The most critical tier of the pipeline. Once the probabilistic LLM extraction is validated by Pydantic, the payload enters a deterministic `Pandas` computation engine:
 * **Relational Joins:** Executing vectorized merges between extracted invoice data and the SQLite client database.
-* **Master Data Lookup:** Hash-matching extracted SKUs/prices against the authoritative product catalog (`zad_domowe__products.csv`).
+* **Master Data Lookup:** Hash-matching extracted SKUs/prices against the authoritative product catalog (`products.csv`).
 * **Automated Auditing:** Computing the `total_price` tensor and dynamically flagging price discrepancies (`ceny_sie_zgadzaja` boolean flag) in $O(N)$ time complexity.
 
 ### 3. Stateful Artifact Orchestration
