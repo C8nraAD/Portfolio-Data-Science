@@ -14,8 +14,3 @@ nav:
       - AI Invoice Intelligence: projekty/ocr-pipeline.md
       - Insurance Premium Advisor: projekty/ubezpieczenia.md
       - Endurance Dynamics: projekty/biegacz-cloud.md
-theme:
-  name: material
-  palette:
-    primary: black
-    accent: deep orange
